@@ -1,10 +1,17 @@
 "use client";
 import searchSVG from "@/assets/Search.svg";
 import Image from "next/image";
+import { Select, SelectSection, SelectItem } from "@heroui/select";
+import SelectComponent from "@/components/Dropbox";
+import { useState } from "react";
 
 export default function Page() {
+  const [sortBy, setSortBy] = useState<"population" | "area" | "name">(
+    "population"
+  );
+
   return (
-    <div className="bg-blue-400 px-2 py-4 w-[95%] mx-auto rounded-lg space-y-3">
+    <div className=" px-2 py-4 w-[95%] mx-auto rounded-lg space-y-3 shadow-xl shadow-black">
       <div className="flex flex-col gap-y-4">
         <p>Found X countries</p>
 
@@ -24,7 +31,7 @@ export default function Page() {
         <div>
           <div>
             <p>Sort by</p>
-            <p>drop box</p>
+            <SelectComponent setSortBy={setSortBy} sortBy={sortBy} />
           </div>
 
           <div>
