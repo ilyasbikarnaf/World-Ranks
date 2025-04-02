@@ -14,34 +14,16 @@ import fetchCountries, { CountriesType } from "@/utils/fetchCountries";
 import Image from "next/image";
 
 export default function TableComponent({
-  countries,
+  paginatedCountries,
   pages,
+  page,
+  setPage,
 }: {
-  countries: CountriesType;
+  paginatedCountries: CountriesType[];
   pages: number;
+  page: number;
+  setPage: (e: number) => void;
 }) {
-  const [page, setPage] = useState(1);
-  const rowsPerPage = 10;
-  const [countries, setCountries] = useState<CountriesType[]>([]);
-
-  useEffect(() => {
-    fetchCountries()
-      .then((data) => {
-        console.log(data);
-        setCountries(data);
-      })
-      .catch((err) => console.log(err.message));
-  }, []);
-
-  const pages = Math.ceil(countries.length / rowsPerPage);
-
-  const items = React.useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-
-    return countries.slice(start, end);
-  }, [page, countries]);
-
   return (
     <Table
       aria-label="Example table with client side pagination"
@@ -71,13 +53,13 @@ export default function TableComponent({
         </TableColumn>
       </TableHeader>
       <TableBody>
-        {items.map((item) => {
+        {paginatedCountries.map((country) => {
           return (
-            <TableRow key={item.ccn3}>
-              <TableCell className="text-2xl">{item.flag}</TableCell>
-              <TableCell>{item.name}</TableCell>
-              <TableCell>{item.population.toLocaleString()}</TableCell>
-              <TableCell>{item.area}</TableCell>
+            <TableRow key={country.ccn3}>
+              <TableCell className="text-2xl">{country.flag}</TableCell>
+              <TableCell>{country.name}</TableCell>
+              <TableCell>{country.population.toLocaleString()}</TableCell>
+              <TableCell>{country.area}</TableCell>
             </TableRow>
           );
         })}

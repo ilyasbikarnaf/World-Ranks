@@ -3,10 +3,11 @@ import searchSVG from "@/assets/Search.svg";
 import Image from "next/image";
 import { Select, SelectSection, SelectItem } from "@heroui/select";
 import SelectComponent from "@/components/Dropbox";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import cc from "@/utils/cc";
 import CheckBoxComponent from "@/components/Checkbox";
 import TableComponent from "@/components/Table";
+import fetchCountries, { CountriesType } from "@/utils/fetchCountries";
 
 const regions = [
   "Antarctic",
@@ -23,6 +24,7 @@ export default function Page() {
   );
   const [checkboxFilters, setCheckboxFilters] = useState<string[]>([]);
   const [regionFilter, setRegionFilter] = useState<string[]>([]);
+  const [page, setPage] = useState(1);
 
   function handleRegionFilterClick(newRegion: string) {
     setRegionFilter((prevFilter) => {
@@ -33,6 +35,26 @@ export default function Page() {
       return [...prevFilter, newRegion];
     });
   }
+
+  const rowsPerPage = 10;
+  const [fetchedCountries, setFetchedCountries] = useState<CountriesType[]>([]);
+
+  useEffect(() => {
+    fetchCountries()
+      .then((data) => {
+        setFetchedCountries(data);
+      })
+      .catch((err) => console.log(err.message));
+  }, []);
+
+  const pages = Math.ceil(fetchedCountries.length / rowsPerPage);
+
+  const paginatedCountries = useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return fetchedCountries.slice(start, end);
+  }, [page, fetchedCountries]);
 
   return (
     <div className=" px-2 py-4 w-[95%] mx-auto rounded-lg space-y-8 shadow-xl shadow-black h-full my-4">
@@ -84,7 +106,12 @@ export default function Page() {
           </div>
         </div>
 
-        <TableComponent />
+        <TableComponent
+          page={page}
+          pages={pages}
+          paginatedCountries={paginatedCountries}
+          setPage={setPage}
+        />
       </div>
     </div>
   );
