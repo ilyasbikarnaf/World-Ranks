@@ -9,9 +9,7 @@ export type CountriesType = {
 };
 
 export default async function fetchCountries(): Promise<CountriesType[]> {
-  const res = await fetch(
-    " https://restcountries.com/v3.1/all?fields=name,flag,population,area,ccn3,independent,unMember,region"
-  );
+  const res = await fetch(" https://restcountries.com/v3.1/all");
 
   if (!res.ok) throw new Error("failed to fetch data");
 
