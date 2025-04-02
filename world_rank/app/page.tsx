@@ -4,14 +4,38 @@ import Image from "next/image";
 import { Select, SelectSection, SelectItem } from "@heroui/select";
 import SelectComponent from "@/components/Dropbox";
 import { useState } from "react";
+import cc from "@/utils/cc";
+import CheckBoxComponent from "@/components/Checkbox";
+import TableComponent from "@/components/Table";
+
+const regions = [
+  "Antarctic",
+  "Americas",
+  "Europe",
+  "Asia",
+  "Africa",
+  "Oceania",
+];
 
 export default function Page() {
   const [sortBy, setSortBy] = useState<"population" | "area" | "name">(
     "population"
   );
+  const [checkboxFilters, setCheckboxFilters] = useState<string[]>([]);
+  const [regionFilter, setRegionFilter] = useState<string[]>([]);
+
+  function handleRegionFilterClick(newRegion: string) {
+    setRegionFilter((prevFilter) => {
+      if (prevFilter.includes(newRegion)) {
+        return prevFilter.filter((regions) => regions !== newRegion);
+      }
+
+      return [...prevFilter, newRegion];
+    });
+  }
 
   return (
-    <div className=" px-2 py-4 w-[95%] mx-auto rounded-lg space-y-3 shadow-xl shadow-black">
+    <div className=" px-2 py-4 w-[95%] mx-auto rounded-lg space-y-8 shadow-xl shadow-black h-full my-4">
       <div className="flex flex-col gap-y-4">
         <p>Found X countries</p>
 
@@ -22,36 +46,45 @@ export default function Page() {
           <input
             type="text"
             placeholder="Search by Name, Region..."
-            className="px-2 rounded w-full bg-transparent outline-none"
+            className="px-2 rounded w-full bg-transparent outline-none placeholder:text-white placeholder:text-sm"
           />
         </div>
       </div>
 
-      <div>
-        <div>
-          <div>
-            <p>Sort by</p>
+      <div className="flex flex-col gap-y-7">
+        <div className="flex flex-col gap-y-6">
+          <div className="flex flex-col gap-y-3">
+            <p className="text-xs">Sort by</p>
             <SelectComponent setSortBy={setSortBy} sortBy={sortBy} />
           </div>
 
-          <div>
-            <p>region</p>
-            <div>
-              <span>amercas</span>
-              <span>amercas</span>
-              <span>amercas</span>
-              <span>amercas</span>
-              <span>amercas</span>
+          <div className="flex flex-col gap-y-2 ">
+            <p className="text-xs">Region</p>
+            <div className="flex flex-wrap gap-x-4   ">
+              {regions.map((region) => (
+                <span
+                  key={region}
+                  className={`px-3 py-1 hover:cursor-pointer transition-all rounded-xl ${cc(
+                    regionFilter.includes(region) && "bg-[#292B30]"
+                  )}`}
+                  onClick={() => handleRegionFilterClick(region)}
+                >
+                  {region}
+                </span>
+              ))}
             </div>
           </div>
 
-          <div>
-            status
-            <div>cecklist shite cecklist shite</div>
+          <div className="flex flex-col gap-y-2">
+            <p className="text-xs">Status</p>
+            <CheckBoxComponent
+              selected={checkboxFilters}
+              setSelected={setCheckboxFilters}
+            />
           </div>
         </div>
 
-        <div>table</div>
+        <TableComponent />
       </div>
     </div>
   );

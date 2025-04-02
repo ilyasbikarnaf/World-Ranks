@@ -22,11 +22,13 @@ export default function SelectComponent({
       aria-label="Sort Options"
       selectedKeys={[sortBy]}
       onSelectionChange={(keys) => {
+        // trasform keys from set to array and get the first item which represent the value we want
         const selectedKey = Array.from(keys)[0] as
           | "population"
           | "area"
           | "name";
-        setSortBy(selectedKey);
+
+        setSortBy(selectedKey == undefined ? "population" : selectedKey);
       }}
     >
       {sortingOptions.map((option) => (
