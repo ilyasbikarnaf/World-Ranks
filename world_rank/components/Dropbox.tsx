@@ -29,7 +29,9 @@ export default function SelectComponent({
           | "area"
           | "name";
 
-        setSortBy(selectedKey == undefined ? "population" : selectedKey);
+        if (selectedKey !== undefined) {
+          setSortBy(selectedKey == undefined ? "population" : selectedKey);
+        }
       }}
     >
       {sortingOptions.map((option) => (
