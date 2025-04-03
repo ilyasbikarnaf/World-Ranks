@@ -3,6 +3,7 @@ import "./globals.css";
 import heroImg from "@/assets/hero-image.jpg";
 import Logo from "@/assets/Logo.svg";
 import Image from "next/image";
+import { CountriesContextProvider } from "@/context/CountriesContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -32,7 +33,7 @@ export default function RootLayout({
             />
           </figure>
 
-          {children}
+          <CountriesContextProvider>{children}</CountriesContextProvider>
         </div>
       </body>
     </html>
