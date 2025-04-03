@@ -53,7 +53,9 @@ export default function TableComponent({
         {paginatedCountries.map((country) => {
           return (
             <TableRow key={country.ccn3}>
-              <TableCell className="text-2xl">{country.flag}</TableCell>
+              <TableCell className="text-2xl sm:text-4xl">
+                {country.flag}
+              </TableCell>
               <TableCell>{country.name}</TableCell>
               <TableCell>{country.population.toLocaleString()}</TableCell>
               <TableCell>{country.area.toLocaleString()}</TableCell>

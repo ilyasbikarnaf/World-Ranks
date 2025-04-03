@@ -7,6 +7,8 @@ import cc from "@/utils/cc";
 import CheckBoxComponent from "@/components/Checkbox";
 import TableComponent from "@/components/Table";
 import fetchCountries, { CountriesType } from "@/utils/fetchCountries";
+import filterCountries from "@/utils/filterCountries";
+import sortCountries from "@/utils/sortCountries";
 
 const regions = [
   "Antarctic",
@@ -39,7 +41,7 @@ export default function Page() {
     });
   }
 
-  const rowsPerPage = 20;
+  const rowsPerPage = 10;
   const [fetchedCountries, setFetchedCountries] = useState<CountriesType[]>([]);
 
   useEffect(() => {
@@ -51,38 +53,17 @@ export default function Page() {
   }, []);
 
   const filteredCountries = useMemo(() => {
-    return fetchedCountries.filter((country) => {
-      const matchesSearch =
-        searchInput == "" ||
-        country.name.toLowerCase().includes(searchInput.toLowerCase());
-
-      const matchesRegion =
-        regionFilter.length === 0 || regionFilter.includes(country.region);
-
-      const matchedCheckbox =
-        checkboxFilters.length === 0 ||
-        checkboxFilters.some((checkbox) => {
-          if (country[checkbox] == true) {
-            return true;
-          }
-        });
-
-      return matchesSearch && matchesRegion && matchedCheckbox;
-    });
+    return filterCountries(
+      fetchedCountries,
+      searchInput,
+      regionFilter,
+      checkboxFilters
+    );
   }, [searchInput, regionFilter, fetchedCountries, checkboxFilters]);
 
   const sortedCountries = useMemo(() => {
     if (filteredCountries.length > 0) {
-      return [...filteredCountries].sort((countryA, countryB) => {
-        if (sortBy === "area") {
-          return countryB.area - countryA.area;
-        } else if (sortBy === "population") {
-          return countryB.population - countryA.population;
-        } else if (sortBy === "name") {
-          return countryA.name.localeCompare(countryB.name);
-        }
-        return 0;
-      });
+      return sortCountries(filteredCountries, sortBy);
     }
 
     return filteredCountries;
@@ -95,7 +76,10 @@ export default function Page() {
     return sortedCountries.slice(start, end);
   }, [page, sortedCountries]);
 
-  const pages = Math.ceil(sortedCountries.length / rowsPerPage);
+  const pages = useMemo(
+    () => Math.ceil(sortedCountries.length / rowsPerPage),
+    [sortedCountries]
+  );
 
   useEffect(() => {
     if (page > pages) {
@@ -104,11 +88,13 @@ export default function Page() {
   }, [pages, page]);
 
   return (
-    <div className="inset-shadow-2xs mx-auto my-4 h-full w-[95%] space-y-8 rounded-xl p-4 shadow-xl shadow-black">
-      <div className="flex flex-col gap-y-4">
-        <p>Found {sortedCountries.length} countries</p>
+    <div className="inset-shadow-2xs z-10 mx-auto my-4 -mt-24 h-full w-[95%] space-y-8 rounded-xl bg-[#1C1D1F] p-4 shadow shadow-black sm:-mt-20 sm:h-[900px] sm:p-5">
+      <div className="flex flex-col gap-y-4 sm:flex-row sm:justify-between">
+        <p className="sm:self-center">
+          Found {sortedCountries.length} countries
+        </p>
 
-        <div className="flex w-full justify-center rounded-lg bg-[#282B30] p-2">
+        <div className="flex w-full justify-center rounded-lg bg-[#282B30] p-2 sm:w-1/2 sm:items-center">
           <button>
             <Image src={searchSVG} alt="search icon" />
           </button>
@@ -124,7 +110,7 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-y-7">
+      <div className="flex flex-col gap-y-7 sm:flex-row sm:gap-2">
         <div className="flex flex-col gap-y-6">
           <div className="flex h-24 flex-col gap-y-3">
             <p className="text-xs">Sort by</p>
