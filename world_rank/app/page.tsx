@@ -71,7 +71,22 @@ export default function Page() {
     });
   }, [searchInput, regionFilter, fetchedCountries, checkboxFilters]);
 
-  console.log(checkboxFilters);
+  const sortedCountries = useMemo(() => {
+    if (filteredCountries.length > 0) {
+      if (sortBy === "name") {
+        return filteredCountries.sort();
+      } else {
+        return filteredCountries.sort((countryA, countryB) => {
+          if (sortBy === "area") {
+            return countryB.area - countryA.area;
+          } else if (sortBy === "population") {
+            return countryB.population - countryA.population;
+          }
+          return 0;
+        });
+      }
+    }
+  }, [sortBy, filteredCountries]);
 
   const paginatedCountries = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
