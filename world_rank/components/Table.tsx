@@ -59,7 +59,7 @@ export default function TableComponent({
               <TableCell className="text-2xl">{country.flag}</TableCell>
               <TableCell>{country.name}</TableCell>
               <TableCell>{country.population.toLocaleString()}</TableCell>
-              <TableCell>{country.area}</TableCell>
+              <TableCell>{country.area.toLocaleString()}</TableCell>
             </TableRow>
           );
         })}

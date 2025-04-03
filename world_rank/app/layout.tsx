@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import heroImg from '@/assets/hero-image.jpg'
-import Logo from '@/assets/Logo.svg'
+import heroImg from "@/assets/hero-image.jpg";
+import Logo from "@/assets/Logo.svg";
 import Image from "next/image";
 
 export const metadata: Metadata = {
@@ -15,21 +15,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark h-full">
-      <body className="max-w-screen-xl mx-auto h-auto overflow-x-hidden">
-
-        <div className="flex flex-col my-6 ">
-
-
-          <figure className="w-full h-[200px] relative">
-            <Image alt="logo image" src={Logo}  className="absolute top-[20px] left-1/2  -translate-x-1/2 " width={150}/>
-            <Image alt="hero image" src={heroImg} className="h-full object-cover"/>
-
+    <html lang="en" className="h-auto overflow-hidden dark">
+      <body className="mx-auto h-full max-w-screen-xl overflow-x-hidden">
+        <div className="flex flex-col">
+          <figure className="relative h-[200px] w-full">
+            <Image
+              alt="logo image"
+              src={Logo}
+              className="absolute left-1/2 top-[20px] -translate-x-1/2"
+              width={150}
+            />
+            <Image
+              alt="hero image"
+              src={heroImg}
+              className="h-full object-cover"
+            />
           </figure>
 
-        {children}
+          {children}
         </div>
-        
       </body>
     </html>
   );

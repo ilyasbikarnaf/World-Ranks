@@ -19,6 +19,7 @@ export default function SelectComponent({
     <Select
       color="default"
       items={sortingOptions}
+      className="max-h-full"
       aria-label="Sort Options"
       selectedKeys={[sortBy]}
       onSelectionChange={(keys) => {

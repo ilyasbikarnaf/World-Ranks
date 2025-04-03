@@ -8,14 +8,14 @@ const checkboxFilters = [
     value: "Member of the United Nations",
   },
   {
-    key: "independant",
-    value: "Independant",
+    key: "independent",
+    value: "Independent",
   },
 ];
 
 type CheckBoxComponentTypes = {
-  selected: string[];
-  setSelected: (selectedCheckboxes: string[]) => void;
+  selected: ("unMember" | "independent")[];
+  setSelected: (selectedCheckboxes: ("unMember" | "independent")[]) => void;
 };
 
 export default function CheckBoxComponent({
@@ -26,11 +26,13 @@ export default function CheckBoxComponent({
     <div className="flex flex-col gap-3">
       <CheckboxGroup
         color="primary"
-        onValueChange={setSelected}
+        onValueChange={(value) =>
+          setSelected(value as ("unMember" | "independent")[])
+        }
         value={selected}
       >
         {checkboxFilters.map((checkboxFilter) => (
-          <Checkbox key={checkboxFilter.key} value={checkboxFilter.value}>
+          <Checkbox key={checkboxFilter.key} value={checkboxFilter.key}>
             {checkboxFilter.value}
           </Checkbox>
         ))}
