@@ -1,5 +1,4 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -8,10 +7,8 @@ import {
   TableRow,
   TableCell,
   Pagination,
-  getKeyValue,
 } from "@heroui/react";
-import fetchCountries, { CountriesType } from "@/utils/fetchCountries";
-import Image from "next/image";
+import { CountriesType } from "@/utils/fetchCountries";
 
 export default function TableComponent({
   paginatedCountries,

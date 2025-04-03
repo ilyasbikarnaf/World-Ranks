@@ -73,29 +73,29 @@ export default function Page() {
 
   const sortedCountries = useMemo(() => {
     if (filteredCountries.length > 0) {
-      if (sortBy === "name") {
-        return filteredCountries.sort();
-      } else {
-        return filteredCountries.sort((countryA, countryB) => {
-          if (sortBy === "area") {
-            return countryB.area - countryA.area;
-          } else if (sortBy === "population") {
-            return countryB.population - countryA.population;
-          }
-          return 0;
-        });
-      }
+      return [...filteredCountries].sort((countryA, countryB) => {
+        if (sortBy === "area") {
+          return countryB.area - countryA.area;
+        } else if (sortBy === "population") {
+          return countryB.population - countryA.population;
+        } else if (sortBy === "name") {
+          return countryA.name.localeCompare(countryB.name);
+        }
+        return 0;
+      });
     }
+
+    return filteredCountries;
   }, [sortBy, filteredCountries]);
 
   const paginatedCountries = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return filteredCountries.slice(start, end);
-  }, [page, filteredCountries]);
+    return sortedCountries.slice(start, end);
+  }, [page, sortedCountries]);
 
-  const pages = Math.ceil(filteredCountries.length / rowsPerPage);
+  const pages = Math.ceil(sortedCountries.length / rowsPerPage);
 
   useEffect(() => {
     if (page > pages) {
@@ -106,7 +106,7 @@ export default function Page() {
   return (
     <div className="inset-shadow-2xs mx-auto my-4 h-full w-[95%] space-y-8 rounded-xl p-4 shadow-xl shadow-black">
       <div className="flex flex-col gap-y-4">
-        <p>Found {filteredCountries.length} countries</p>
+        <p>Found {sortedCountries.length} countries</p>
 
         <div className="flex w-full justify-center rounded-lg bg-[#282B30] p-2">
           <button>
