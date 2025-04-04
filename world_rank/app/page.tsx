@@ -49,9 +49,12 @@ export default function Page() {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (fetchedCountries.length > 0) {
+        return;
+      }
+
       try {
         setIsLoading(true);
-        await wait(10000);
         const data = await fetchCountries();
         setFetchedCountries(data);
       } catch (err) {
@@ -62,7 +65,7 @@ export default function Page() {
     };
 
     fetchData();
-  }, [setFetchedCountries, setIsLoading]);
+  }, [setFetchedCountries, setIsLoading, fetchedCountries]);
 
   const filteredCountries = useMemo(() => {
     return filterCountries(

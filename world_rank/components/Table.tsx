@@ -9,8 +9,10 @@ import {
   TableCell,
   Pagination,
   Spinner,
+  Skeleton,
 } from "@heroui/react";
 import Link from "next/link";
+import RowSkeleton from "./RowSkeleton";
 
 export default function TableComponent({
   paginatedCountries,
@@ -54,35 +56,49 @@ export default function TableComponent({
         </TableColumn>
       </TableHeader>
 
-      {isLoading ? (
-        <TableBody>
-          <TableRow>
-            <TableCell colSpan={4} className="py-10 text-center">
-              <Spinner size="lg" />
-            </TableCell>
-          </TableRow>
+      {!isLoading ? (
+        <TableBody items={paginatedCountries}>
+          {(country: any) => {
+            return (
+              <Link href="/">
+                <TableRow
+                  key={country.cca2}
+                  // href={country.cca2}
+                  className="hover hover:cursor-pointer hover:bg-[#1C1D1F]"
+                >
+                  <TableCell className="text-2xl sm:text-4xl">
+                    {country.flag}
+                  </TableCell>
+
+                  <TableCell>
+                    <Link href={country.cca2}>{country.name.common}</Link>
+                  </TableCell>
+                  <TableCell>{country.population.toLocaleString()}</TableCell>
+                  <TableCell>{country.area.toLocaleString()}</TableCell>
+                </TableRow>
+              </Link>
+            );
+          }}
         </TableBody>
       ) : (
-        <TableBody>
-          {paginatedCountries.map((country) => {
-            return (
-              <TableRow
-                key={country.cca2}
-                // href={country.cca2}
-                className="hover hover:cursor-pointer hover:bg-[#1C1D1F]"
-              >
-                <TableCell className="text-2xl sm:text-4xl">
-                  {country.flag}
-                </TableCell>
+        <TableBody className="space-y-3">
+          {Array.from({ length: 10 }, (_, i) => (
+            <TableRow key={i}>
+              <TableCell className="text-2xl sm:text-4xl">
+                <Skeleton className="h-6 w-4/5 rounded-lg" />
+              </TableCell>
 
-                <TableCell>
-                  <Link href={country.cca2}>{country.name.common}</Link>{" "}
-                </TableCell>
-                <TableCell>{country.population.toLocaleString()}</TableCell>
-                <TableCell>{country.area.toLocaleString()}</TableCell>
-              </TableRow>
-            );
-          })}
+              <TableCell>
+                <Skeleton className="h-6 w-4/5 rounded-lg" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-6 w-4/5 rounded-lg" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-6 w-4/5 rounded-lg" />
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       )}
     </Table>
