@@ -44,7 +44,7 @@ export default function Country() {
                 width={50}
               />
             </Link>
-            <div className="-my-10 mb-1 flex flex-col items-center gap-y-5">
+            <div className="-my-10 mb-1 flex flex-col items-center gap-y-5 sm:-mt-16">
               <figure className="h-auto w-44">
                 <Image
                   src={`${country.flags.svg}`}
@@ -109,6 +109,7 @@ export default function Country() {
                     const {
                       flags: { svg },
                       name: { common },
+                      cca2,
                     } = fetchedCountries.find(
                       (c) => c.cca3 === neighbourCountryCode
                     );
@@ -117,6 +118,7 @@ export default function Country() {
                         key={neighbourCountryCode}
                         common={common}
                         svg={svg}
+                        cca2={cca2}
                       />
                     );
                   })}

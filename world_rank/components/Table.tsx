@@ -10,21 +10,25 @@ import {
   Pagination,
   Skeleton,
 } from "@heroui/react";
+import { useRouter } from "next/navigation";
 
 export default function TableComponent({
   paginatedCountries,
   pages,
   page,
   setPage,
-  handleRedirect,
 }: {
   paginatedCountries: any;
   pages: number;
   page: number;
   setPage: (e: number) => void;
-  handleRedirect: (path: string) => void;
 }) {
   const { isLoading } = useCountriesContext();
+  const router = useRouter();
+
+  function handleRowClick(cca2: string) {
+    router.push(`/${cca2}`);
+  }
 
   return (
     <Table
@@ -35,10 +39,10 @@ export default function TableComponent({
             isCompact
             showControls
             showShadow
-            color="secondary"
-            page={page}
+            color="default"
+            page={4}
             total={pages}
-            onChange={(page) => setPage(page)}
+            onChange={(newPage) => setPage(newPage)}
           />
         </div>
       }
@@ -60,7 +64,7 @@ export default function TableComponent({
           {(country: any) => {
             return (
               <TableRow
-                onClick={() => handleRedirect(country.cca2)}
+                onClick={() => handleRowClick(country.cca2)}
                 key={country.cca2}
                 className="hover hover:cursor-pointer hover:bg-[#1C1D1F]"
               >
@@ -69,6 +73,7 @@ export default function TableComponent({
                 </TableCell>
 
                 <TableCell>{country.name.common}</TableCell>
+
                 <TableCell>{country.population.toLocaleString()}</TableCell>
                 <TableCell>{country.area.toLocaleString()}</TableCell>
               </TableRow>

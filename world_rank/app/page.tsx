@@ -32,11 +32,6 @@ export default function Page() {
   const [regionFilter, setRegionFilter] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
-  const router = useRouter();
-
-  function handleRedirect(countryPath: string) {
-    router.push(`/${countryPath}`);
-  }
 
   function handleRegionFilterClick(newRegion: string) {
     setRegionFilter((prevFilter) => {
@@ -164,7 +159,6 @@ export default function Page() {
         </div>
 
         <TableComponent
-          handleRedirect={handleRedirect}
           page={page}
           pages={pages}
           paginatedCountries={paginatedCountries}
