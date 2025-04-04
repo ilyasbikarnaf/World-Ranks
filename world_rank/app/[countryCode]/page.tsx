@@ -5,6 +5,8 @@ import { useCountryByCode } from "@/utils/useCountryByCode";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useLayoutEffect } from "react";
+import backArrow from "@/assets/back_arrow.svg";
+import Link from "next/link";
 
 export default function Country() {
   const { countryCode }: { countryCode: string } = useParams();
@@ -30,7 +32,15 @@ export default function Country() {
 
   return (
     <>
-      <div className="z-10 -mt-11 mb-6 flex h-full w-full flex-col gap-6 gap-y-5 bg-[#1C1D1F] sm:mx-auto sm:w-full sm:max-w-[800px] sm:rounded-xl sm:p-3 sm:shadow-lg">
+      <div className="relative z-10 -mt-11 mb-6 flex h-full w-full flex-col gap-6 gap-y-5 bg-[#1C1D1F] sm:mx-auto sm:w-full sm:max-w-[800px] sm:rounded-xl sm:p-3 sm:shadow-lg">
+        <Link href="/">
+          <Image
+            src={backArrow}
+            alt="back arrow"
+            className="absolute left-4 top-2"
+            width={50}
+          />
+        </Link>
         <div className="-my-10 mb-1 flex flex-col items-center gap-y-5">
           <figure className="h-auto w-44">
             <Image
@@ -88,35 +98,38 @@ export default function Country() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-y-3 px-5">
-          <p>Neighbouring Countries</p>
-          <div className="flex flex-wrap gap-5">
-            {country.borders.map((neighbourCountryCode) => {
-              const {
-                flags: { svg },
-                name: { common },
-              } = fetchedCountries.find((c) => c.cca3 === neighbourCountryCode);
-              return (
-                <div
-                  key={neighbourCountryCode}
-                  className="flex flex-col justify-center"
-                >
-                  <figure className="mx-auto h-auto">
-                    <Image
-                      alt={`${common} flag`}
-                      src={svg}
-                      width={100}
-                      height={100}
-                      className="rounded"
-                    />
-                  </figure>
-                  <p className="text-center text-sm">{common}</p>
-                </div>
-              );
-            })}
-            {/* make component out of this */}
+        {country.borders?.length > 0 && (
+          <div className="flex flex-col gap-y-3 px-5">
+            <p>Neighbouring Countries</p>
+            <div className="flex flex-wrap gap-5">
+              {country.borders.map((neighbourCountryCode) => {
+                const {
+                  flags: { svg },
+                  name: { common },
+                } = fetchedCountries.find(
+                  (c) => c.cca3 === neighbourCountryCode
+                );
+                return (
+                  <div
+                    key={neighbourCountryCode}
+                    className="flex flex-col justify-center"
+                  >
+                    <figure className="mx-auto h-auto">
+                      <Image
+                        alt={`${common} flag`}
+                        src={svg}
+                        width={100}
+                        height={100}
+                        className="rounded"
+                      />
+                    </figure>
+                    <p className="text-center text-sm">{common}</p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );
