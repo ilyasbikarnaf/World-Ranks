@@ -10,6 +10,7 @@ import fetchCountries from "@/utils/fetchCountries";
 import filterCountries from "@/utils/filterCountries";
 import sortCountries from "@/utils/sortCountries";
 import { useCountriesContext } from "@/context/CountriesContext";
+import { resolve } from "path";
 
 const regions = [
   "Antarctic",
@@ -43,15 +44,25 @@ export default function Page() {
   }
 
   const rowsPerPage = 10;
-  const { fetchedCountries, setFetchedCountries } = useCountriesContext();
+  const { fetchedCountries, setFetchedCountries, setIsLoading } =
+    useCountriesContext();
 
   useEffect(() => {
-    fetchCountries()
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        await wait(10000);
+        const data = await fetchCountries();
         setFetchedCountries(data);
-      })
-      .catch((err) => console.log(err.message));
-  }, [setFetchedCountries]);
+      } catch (err) {
+        console.log(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [setFetchedCountries, setIsLoading]);
 
   const filteredCountries = useMemo(() => {
     return filterCountries(
@@ -153,4 +164,8 @@ export default function Page() {
       </div>
     </div>
   );
+}
+
+async function wait(duration: number) {
+  return new Promise((resolve) => setTimeout(resolve, duration));
 }

@@ -1,4 +1,5 @@
 "use client";
+import { useCountriesContext } from "@/context/CountriesContext";
 import {
   Table,
   TableHeader,
@@ -7,6 +8,7 @@ import {
   TableRow,
   TableCell,
   Pagination,
+  Spinner,
 } from "@heroui/react";
 import Link from "next/link";
 
@@ -21,6 +23,8 @@ export default function TableComponent({
   page: number;
   setPage: (e: number) => void;
 }) {
+  const { isLoading } = useCountriesContext();
+
   return (
     <Table
       aria-label="Example table with client side pagination"
@@ -49,27 +53,38 @@ export default function TableComponent({
           AREA (km<sup>2</sup>)
         </TableColumn>
       </TableHeader>
-      <TableBody>
-        {paginatedCountries.map((country) => {
-          return (
-            <TableRow
-              key={country.cca2}
-              // href={country.cca2}
-              className="hover hover:cursor-pointer hover:bg-[#1C1D1F]"
-            >
-              <TableCell className="text-2xl sm:text-4xl">
-                {country.flag}
-              </TableCell>
 
-              <TableCell>
-                <Link href={country.cca2}>{country.name.common}</Link>{" "}
-              </TableCell>
-              <TableCell>{country.population.toLocaleString()}</TableCell>
-              <TableCell>{country.area.toLocaleString()}</TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
+      {isLoading ? (
+        <TableBody>
+          <TableRow>
+            <TableCell colSpan={4} className="py-10 text-center">
+              <Spinner size="lg" />
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      ) : (
+        <TableBody>
+          {paginatedCountries.map((country) => {
+            return (
+              <TableRow
+                key={country.cca2}
+                // href={country.cca2}
+                className="hover hover:cursor-pointer hover:bg-[#1C1D1F]"
+              >
+                <TableCell className="text-2xl sm:text-4xl">
+                  {country.flag}
+                </TableCell>
+
+                <TableCell>
+                  <Link href={country.cca2}>{country.name.common}</Link>{" "}
+                </TableCell>
+                <TableCell>{country.population.toLocaleString()}</TableCell>
+                <TableCell>{country.area.toLocaleString()}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      )}
     </Table>
   );
 }

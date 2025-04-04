@@ -20,6 +20,7 @@ export default function Country() {
         .then(setFetchedCountries)
         .catch((err) => alert(err.message))
         .finally(() => setIsLoading(false));
+
     }
   }, [fetchedCountries, setFetchedCountries, setIsLoading]);
 
