@@ -2,9 +2,14 @@
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
     "noEmit": true,
+    "noEmitOnError": false,
+    // "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strict": false,
+
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",

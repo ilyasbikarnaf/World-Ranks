@@ -1,7 +1,5 @@
-import { CountriesType } from "./fetchCountries";
-
 export default function filterCountries(
-  countries: CountriesType[],
+  countries: any,
   searchInput: string,
   regionFilter: string[],
   checkboxFilters: ("unMember" | "independent")[]
@@ -9,7 +7,7 @@ export default function filterCountries(
   return countries.filter((country) => {
     const matchesSearch =
       searchInput == "" ||
-      country.name.toLowerCase().includes(searchInput.toLowerCase());
+      country.name.common.toLowerCase().includes(searchInput.toLowerCase());
 
     const matchesRegion =
       regionFilter.length === 0 || regionFilter.includes(country.region);

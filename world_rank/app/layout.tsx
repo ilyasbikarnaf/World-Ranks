@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-auto overflow-hidden bg-[#1C1D1F] dark">
+    <html lang="en" className="h-auto overflow-x-hidden bg-[#1C1D1F] dark">
       <body className="mx-auto h-full max-w-screen-xl overflow-x-hidden">
         <div className="flex flex-col">
           <figure className="relative h-[200px] w-full">

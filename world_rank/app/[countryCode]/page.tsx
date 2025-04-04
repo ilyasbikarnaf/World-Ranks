@@ -1,66 +1,123 @@
-export default function Country({
-  params,
-}: {
-  params: { countryCode: string };
-}) {
+"use client";
+import { useCountriesContext } from "@/context/CountriesContext";
+import fetchCountries from "@/utils/fetchCountries";
+import { useCountryByCode } from "@/utils/useCountryByCode";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useEffect, useLayoutEffect } from "react";
+
+export default function Country() {
+  const { countryCode }: { countryCode: string } = useParams();
+  const { fetchedCountries, setFetchedCountries, isLoading, setIsLoading } =
+    useCountriesContext();
+
+  useLayoutEffect(() => {
+    if (fetchedCountries.length === 0) {
+      setIsLoading(true);
+      fetchCountries()
+        .then(setFetchedCountries)
+        .catch((err) => alert(err.message))
+        .finally(() => setIsLoading(false));
+    }
+  }, [fetchedCountries, setFetchedCountries, setIsLoading]);
+
+  const country = useCountryByCode(countryCode);
+  console.log();
+
+  if (isLoading || !country) {
+    return <div>Loading</div>;
+  }
+
   return (
-    <div>
-      <div>
-        <figure>either image or its flag</figure>
-        <div>
-          <h2>countyr name</h2>
-          <p>something here</p>
-        </div>
-      </div>
-
-      <div>
-        <div>
-          <p>population</p>
-          <p>Population number</p>
-        </div>
-
-        <div>
-          <p>
-            Area (km<sup>2</sup>)
-          </p>
-          <p>area in km</p>
-        </div>
-      </div>
-
-      <div>
-        <div>
-          <p>capital</p>
-          <p>answer</p>
+    <>
+      <div className="z-10 -mt-11 mb-6 flex h-full w-full flex-col gap-6 gap-y-5 bg-[#1C1D1F] sm:mx-auto sm:w-full sm:max-w-[800px] sm:rounded-xl sm:p-3 sm:shadow-lg">
+        <div className="-my-10 mb-1 flex flex-col items-center gap-y-5">
+          <figure className="h-auto w-44">
+            <Image
+              src={`${country.flags.svg}`}
+              alt={`${country.name.common} flag`}
+              width={200}
+              height={300}
+              className="rounded"
+            />
+          </figure>
+          <div className="text-center">
+            <h2 className="text-2xl">{country.name.common}</h2>
+            <p className="text-lg">{country.name.official}</p>
+          </div>
         </div>
 
-        <div>
-          <p>Subregion</p>
-          <p>answer</p>
-        </div>
-        <div>
-          <p>Language</p>
-          <p>answer</p>
-        </div>
-        <div>
-          <p>Currencies</p>
-          <p>answer</p>
-        </div>
-        <div>
-          <p>Continents</p>
-          <p>answer</p>
-        </div>
-      </div>
+        <div className="flex justify-center gap-x-3 *:grid *:grid-cols-[auto,1fr] *:grid-rows-1 *:gap-x-2 *:divide-x-1 *:rounded-lg *:bg-[#282B30] *:px-4 *:py-2.5 sm:gap-x-9">
+          <div className="*:justify-self-center">
+            <p className="text-xs">population</p>
+            <p className="pl-3 text-xs">
+              {country.population.toLocaleString()}
+            </p>
+          </div>
 
-      <div>
-        <p>Neighbouring Countries</p>
-        <div>
-          {/* make component out of this */}
+          <div className="">
+            <p className="text-xs">
+              Area (km<sup>2</sup>)
+            </p>
+            <p className="pl-3 text-xs">{country.area.toLocaleString()}</p>
+          </div>
+        </div>
+
+        <div className="*:flex *:h-16 *:items-center *:justify-between *:border-y-1 *:border-[#26292D] *:*:p-5">
           <div>
-            <p>Country flag</p>
-            <p>country name</p>
+            <p>capital</p>
+            <p>{country.capital[0]}</p>
+          </div>
+
+          <div>
+            <p>Subregion</p>
+            <p>{country.subregion}</p>
+          </div>
+          <div>
+            <p>Language</p>
+            <p>{Object.values(country.languages).join(", ")}</p>
+          </div>
+          <div>
+            <p>Currencies</p>
+            {/* @ts-expect-error name exists */}
+            <p>{Object.values(country.currencies)[0].name}</p>
+          </div>
+          <div>
+            <p>Continents</p>
+            <p>{country.continents[0]}</p>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-y-3 px-5">
+          <p>Neighbouring Countries</p>
+          <div className="flex flex-wrap gap-5">
+            {country.borders.map((neighbourCountryCode) => {
+              const {
+                flags: { svg },
+                name: { common },
+              } = fetchedCountries.find((c) => c.cca3 === neighbourCountryCode);
+              return (
+                <div
+                  key={neighbourCountryCode}
+                  className="flex flex-col justify-center"
+                >
+                  <figure className="mx-auto h-auto">
+                    <Image
+                      alt={`${common} flag`}
+                      src={svg}
+                      width={100}
+                      height={100}
+                      className="rounded"
+                    />
+                  </figure>
+                  <p className="text-center text-sm">{common}</p>
+                </div>
+              );
+            })}
+            {/* make component out of this */}
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

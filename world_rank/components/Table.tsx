@@ -8,7 +8,7 @@ import {
   TableCell,
   Pagination,
 } from "@heroui/react";
-import { CountriesType } from "@/utils/fetchCountries";
+import Link from "next/link";
 
 export default function TableComponent({
   paginatedCountries,
@@ -16,7 +16,7 @@ export default function TableComponent({
   page,
   setPage,
 }: {
-  paginatedCountries: CountriesType[];
+  paginatedCountries: any;
   pages: number;
   page: number;
   setPage: (e: number) => void;
@@ -52,11 +52,18 @@ export default function TableComponent({
       <TableBody>
         {paginatedCountries.map((country) => {
           return (
-            <TableRow key={country.ccn3}>
+            <TableRow
+              key={country.cca2}
+              // href={country.cca2}
+              className="hover hover:cursor-pointer hover:bg-[#1C1D1F]"
+            >
               <TableCell className="text-2xl sm:text-4xl">
                 {country.flag}
               </TableCell>
-              <TableCell>{country.name}</TableCell>
+
+              <TableCell>
+                <Link href={country.cca2}>{country.name.common}</Link>{" "}
+              </TableCell>
               <TableCell>{country.population.toLocaleString()}</TableCell>
               <TableCell>{country.area.toLocaleString()}</TableCell>
             </TableRow>

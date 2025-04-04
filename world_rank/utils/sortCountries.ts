@@ -1,7 +1,5 @@
-import { CountriesType } from "./fetchCountries";
-
 export default function sortCountries(
-  countries: CountriesType[],
+  countries: any,
   sortBy: "population" | "area" | "name"
 ) {
   return [...countries].sort((countryA, countryB) => {
@@ -10,7 +8,7 @@ export default function sortCountries(
     } else if (sortBy === "population") {
       return countryB.population - countryA.population;
     } else if (sortBy === "name") {
-      return countryA.name.localeCompare(countryB.name);
+      return countryA.name.common.localeCompare(countryB.name.common);
     }
     return 0;
   });

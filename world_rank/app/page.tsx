@@ -6,9 +6,10 @@ import { useEffect, useMemo, useState } from "react";
 import cc from "@/utils/cc";
 import CheckBoxComponent from "@/components/Checkbox";
 import TableComponent from "@/components/Table";
-import fetchCountries, { CountriesType } from "@/utils/fetchCountries";
+import fetchCountries from "@/utils/fetchCountries";
 import filterCountries from "@/utils/filterCountries";
 import sortCountries from "@/utils/sortCountries";
+import { useCountriesContext } from "@/context/CountriesContext";
 
 const regions = [
   "Antarctic",
@@ -42,7 +43,7 @@ export default function Page() {
   }
 
   const rowsPerPage = 10;
-  const [fetchedCountries, setFetchedCountries] = useState<CountriesType[]>([]);
+  const { fetchedCountries, setFetchedCountries } = useCountriesContext();
 
   useEffect(() => {
     fetchCountries()
@@ -50,7 +51,7 @@ export default function Page() {
         setFetchedCountries(data);
       })
       .catch((err) => console.log(err.message));
-  }, []);
+  }, [setFetchedCountries]);
 
   const filteredCountries = useMemo(() => {
     return filterCountries(
