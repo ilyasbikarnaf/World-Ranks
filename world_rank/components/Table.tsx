@@ -8,22 +8,21 @@ import {
   TableRow,
   TableCell,
   Pagination,
-  Spinner,
   Skeleton,
 } from "@heroui/react";
-import Link from "next/link";
-import RowSkeleton from "./RowSkeleton";
 
 export default function TableComponent({
   paginatedCountries,
   pages,
   page,
   setPage,
+  handleRedirect,
 }: {
   paginatedCountries: any;
   pages: number;
   page: number;
   setPage: (e: number) => void;
+  handleRedirect: (path: string) => void;
 }) {
   const { isLoading } = useCountriesContext();
 
@@ -60,23 +59,19 @@ export default function TableComponent({
         <TableBody items={paginatedCountries}>
           {(country: any) => {
             return (
-              <Link href="/">
-                <TableRow
-                  key={country.cca2}
-                  // href={country.cca2}
-                  className="hover hover:cursor-pointer hover:bg-[#1C1D1F]"
-                >
-                  <TableCell className="text-2xl sm:text-4xl">
-                    {country.flag}
-                  </TableCell>
+              <TableRow
+                onClick={() => handleRedirect(country.cca2)}
+                key={country.cca2}
+                className="hover hover:cursor-pointer hover:bg-[#1C1D1F]"
+              >
+                <TableCell className="text-2xl sm:text-4xl">
+                  {country.flag}
+                </TableCell>
 
-                  <TableCell>
-                    <Link href={country.cca2}>{country.name.common}</Link>
-                  </TableCell>
-                  <TableCell>{country.population.toLocaleString()}</TableCell>
-                  <TableCell>{country.area.toLocaleString()}</TableCell>
-                </TableRow>
-              </Link>
+                <TableCell>{country.name.common}</TableCell>
+                <TableCell>{country.population.toLocaleString()}</TableCell>
+                <TableCell>{country.area.toLocaleString()}</TableCell>
+              </TableRow>
             );
           }}
         </TableBody>

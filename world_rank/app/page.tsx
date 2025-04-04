@@ -10,7 +10,7 @@ import fetchCountries from "@/utils/fetchCountries";
 import filterCountries from "@/utils/filterCountries";
 import sortCountries from "@/utils/sortCountries";
 import { useCountriesContext } from "@/context/CountriesContext";
-import { resolve } from "path";
+import { useRouter } from "next/router";
 
 const regions = [
   "Antarctic",
@@ -32,6 +32,11 @@ export default function Page() {
   const [regionFilter, setRegionFilter] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
+  const router = useRouter();
+
+  function handleRedirect(countryPath: string) {
+    router.push(`/${countryPath}`);
+  }
 
   function handleRegionFilterClick(newRegion: string) {
     setRegionFilter((prevFilter) => {
@@ -159,6 +164,7 @@ export default function Page() {
         </div>
 
         <TableComponent
+          handleRedirect={handleRedirect}
           page={page}
           pages={pages}
           paginatedCountries={paginatedCountries}
@@ -167,8 +173,4 @@ export default function Page() {
       </div>
     </div>
   );
-}
-
-async function wait(duration: number) {
-  return new Promise((resolve) => setTimeout(resolve, duration));
 }
