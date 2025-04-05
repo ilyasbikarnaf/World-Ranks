@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function NeighbourCountry({ common, svg, cca2 }) {
   return (
     <Link href={cca2}>
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center gap-y-2">
         <figure className="mx-auto h-auto">
           <Image
             alt={`${common} flag`}
@@ -15,7 +15,7 @@ export default function NeighbourCountry({ common, svg, cca2 }) {
             className="rounded"
           />
         </figure>
-        <p className="text-center text-sm">{common}</p>
+        <p className="items-baseline text-center text-sm">{common}</p>
       </div>
     </Link>
   );
