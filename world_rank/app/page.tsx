@@ -10,7 +10,6 @@ import fetchCountries from "@/utils/fetchCountries";
 import filterCountries from "@/utils/filterCountries";
 import sortCountries from "@/utils/sortCountries";
 import { useCountriesContext } from "@/context/CountriesContext";
-import { useRouter } from "next/router";
 
 const regions = [
   "Antarctic",

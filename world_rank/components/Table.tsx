@@ -40,8 +40,8 @@ export default function TableComponent({
             showControls
             showShadow
             color="default"
-            page={4}
-            total={pages}
+            page={page}
+            total={pages || 1}
             onChange={(newPage) => setPage(newPage)}
           />
         </div>
