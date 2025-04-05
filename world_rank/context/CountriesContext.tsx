@@ -14,6 +14,8 @@ type CountriesContextProps = {
   fetchedCountries: any;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setFetchedCountries: Dispatch<SetStateAction<string[]>>;
+  isError: string;
+  setIsError: Dispatch<SetStateAction<string>>;
 };
 
 const CountriesContext = createContext<null | CountriesContextProps>(null);
@@ -24,11 +26,19 @@ export function CountriesContextProvider({
   children: ReactNode;
 }) {
   const [fetchedCountries, setFetchedCountries] = useState<string[]>([]);
+  const [isError, setIsError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   return (
     <CountriesContext.Provider
-      value={{ setIsLoading, isLoading, fetchedCountries, setFetchedCountries }}
+      value={{
+        setIsLoading,
+        isLoading,
+        fetchedCountries,
+        setFetchedCountries,
+        isError,
+        setIsError,
+      }}
     >
       {children}
     </CountriesContext.Provider>

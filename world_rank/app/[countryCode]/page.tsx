@@ -4,35 +4,58 @@ import fetchCountries from "@/utils/fetchCountries";
 import { useCountryByCode } from "@/utils/useCountryByCode";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect } from "react";
 import backArrow from "@/assets/back_arrow.svg";
 import Link from "next/link";
 import NeighbourCountry from "@/components/NeighbourCountry";
 import CountryLoading from "@/components/CountryLoading";
+import { Bounce, toast } from "react-toastify";
 
 export default function Country() {
   const { countryCode }: { countryCode: string } = useParams();
-  const { fetchedCountries, setFetchedCountries, isLoading, setIsLoading } =
-    useCountriesContext();
+  const {
+    fetchedCountries,
+    setFetchedCountries,
+    isLoading,
+    setIsLoading,
+    setIsError,
+    isError,
+  } = useCountriesContext();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    setIsError("");
     if (fetchedCountries.length === 0) {
       setIsLoading(true);
       fetchCountries()
         .then(setFetchedCountries)
-        .catch((err) => alert(err.message))
+        .catch((err) => {
+          toast.error("Failed To Fetch Country Data", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+          });
+          setIsError("Failed To Fetch Country Data");
+        })
         .finally(() => setIsLoading(false));
     }
-  }, [fetchedCountries, setFetchedCountries, setIsLoading]);
+  }, [fetchedCountries, setFetchedCountries, setIsLoading, setIsError]);
 
   const country = useCountryByCode(countryCode);
-  console.log();
 
   return (
     <>
       <div className="relative z-10 -mt-11 mb-6 flex h-full w-full flex-col gap-6 gap-y-5 bg-[#1C1D1F] sm:mx-auto sm:w-full sm:max-w-[800px] sm:rounded-xl sm:p-3 sm:shadow-lg">
-        {/* isLoading || !country  */}
-        {isLoading || !country ? (
+        {isError != "" ? (
+          <div className="h-[800px] place-content-center text-center text-2xl text-red-500">
+            {isError}
+          </div>
+        ) : isLoading || !country ? (
           <CountryLoading />
         ) : (
           <>

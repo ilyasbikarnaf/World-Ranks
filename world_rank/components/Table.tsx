@@ -11,6 +11,7 @@ import {
   Skeleton,
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import TableError from "./TableError";
 
 export default function TableComponent({
   paginatedCountries,
@@ -23,11 +24,15 @@ export default function TableComponent({
   page: number;
   setPage: (e: number) => void;
 }) {
-  const { isLoading } = useCountriesContext();
+  const { isLoading, isError } = useCountriesContext();
   const router = useRouter();
 
   function handleRowClick(cca2: string) {
     router.push(`/${cca2}`);
+  }
+
+  if (isError !== "") {
+    return <TableError errorMessage={isError} />;
   }
 
   return (

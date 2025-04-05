@@ -43,7 +43,7 @@ export default function Page() {
   }
 
   const rowsPerPage = 10;
-  const { fetchedCountries, setFetchedCountries, setIsLoading } =
+  const { fetchedCountries, setFetchedCountries, setIsLoading, setIsError } =
     useCountriesContext();
 
   useEffect(() => {
@@ -54,17 +54,18 @@ export default function Page() {
 
       try {
         setIsLoading(true);
+        setIsError("");
         const data = await fetchCountries();
         setFetchedCountries(data);
       } catch (err) {
-        console.log(err.message);
+        setIsError(err.message);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [setFetchedCountries, setIsLoading, fetchedCountries]);
+  }, [setFetchedCountries, setIsLoading, fetchedCountries, setIsError]);
 
   const filteredCountries = useMemo(() => {
     return filterCountries(

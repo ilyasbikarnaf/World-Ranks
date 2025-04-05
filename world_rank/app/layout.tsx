@@ -4,6 +4,7 @@ import heroImg from "@/assets/hero-image.jpg";
 import Logo from "@/assets/Logo.svg";
 import Image from "next/image";
 import { CountriesContextProvider } from "@/context/CountriesContext";
+import ToastcontainerComponent from "@/components/ToastContainer";
 
 export const metadata: Metadata = {
   title: "WorldRanks-Country Rankings",
@@ -36,7 +37,10 @@ export default function RootLayout({
             />
           </figure>
 
-          <CountriesContextProvider>{children}</CountriesContextProvider>
+          <CountriesContextProvider>
+            {children}
+            <ToastcontainerComponent />
+          </CountriesContextProvider>
         </div>
       </body>
     </html>

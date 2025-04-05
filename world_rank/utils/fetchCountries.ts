@@ -1,9 +1,24 @@
 export default async function fetchCountries() {
-  const res = await fetch("https://restcountries.com/v3.1/all", {
-    cache: "force-cache",
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-  if (!res.ok) throw new Error("failed to fetch data");
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+    const res = await fetch("https://restcountries.com/v3.1/all", {
+      cache: "force-cache",
+      signal: controller.signal,
+    });
 
-  return res.json();
+    if (!res.ok) throw new Error("An Error Occurred during data fetching");
+
+    return res.json();
+  } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error("Fetch request was aborted due to timeout");
+    } else {
+      throw new Error("An Error Occurred during data fetching ");
+    }
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
