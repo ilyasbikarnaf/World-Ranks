@@ -32,7 +32,11 @@ export default function CheckBoxComponent({
         value={selected}
       >
         {checkboxFilters.map((checkboxFilter) => (
-          <Checkbox key={checkboxFilter.key} value={checkboxFilter.key}>
+          <Checkbox
+            key={checkboxFilter.key}
+            value={checkboxFilter.key}
+            className="*:text-white"
+          >
             {checkboxFilter.value}
           </Checkbox>
         ))}
