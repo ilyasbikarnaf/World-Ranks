@@ -3,7 +3,6 @@ export default async function fetchCountries() {
   const timeoutId = setTimeout(() => controller.abort(), 5000);
 
   try {
-    await new Promise((resolve) => setTimeout(resolve, 10000));
     const res = await fetch("https://restcountries.com/v3.1/all", {
       cache: "force-cache",
       signal: controller.signal,
